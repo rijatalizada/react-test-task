@@ -3,19 +3,28 @@ import usersArray from "../../users.json";
 
 const initialState = {
   users: usersArray,
-  usersAmount: 0,
+  usersAmount: usersArray.length,
+  reversed: false
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    deleteUser: (state, { payload }) => {
-      state.users = state.users.filter((user) => user.id !== payload);
-    },
+    searchUser: ((state,  {payload}) => {
+      if(payload === "") {
+        state.users = usersArray
+      } else {
+        state.users = usersArray.filter((user) => user.name.toLowerCase().includes(payload.toLowerCase()))
+      }
+    }),
+    reverseArray: ((state, {payload}) => {
+      state.reversed = !state.reversed
+      state.users = state.users.reverse()
+    })
   },
 });
 
-export const { deleteUser } = userSlice.actions;
+export const { reverseArray, searchUser } = userSlice.actions;
 
 export default userSlice.reducer;
